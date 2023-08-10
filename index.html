@@ -42,11 +42,12 @@
                 document.getElementById('user_id').value = userId;
 
                 // 既存データを取得し、フォームに表示
-                const response = await fetch('https://script.google.com/macros/s/AKfycby9W39wckcO2UuB_gtyr5SwstYT8SVxsRZDRmqZSMgIIRI3Ula_NumgMGemk1wraNMS7w/exec?user_id=' + userId);  // ご自身のGAS WebアプリのURLに置き換えてください
+                const response = await fetch('https://script.google.com/macros/s/AKfycbwSlIvzU4Cvh52hLrhI0saHmDPv_zY1x1Wr2O7m2EieKUFquIBWClFVmAMPe6M1a172Tw/exec?user_id=' + userId);  // ご自身のGAS WebアプリのURLに置き換えてください
                 const data = await response.json();
 
                 if (data) {
                     document.getElementById('message').value = data.message;
+                    document.getElementById('image').value = data.imageData;
                 }
             } catch (error) {
                 console.error('Failed to fetch data from spreadsheet', error);
@@ -60,10 +61,24 @@
             var userId = document.getElementById('user_id').value;
             var message = document.getElementById('message').value;
 
+            var imageInput = document.getElementById('image');
+            var imageFile = imageInput.files[0];
+
+            if (imageFile) {
+                var reader = new FileReader();
+                reader.readAsDataURL(imageFile);
+                reader.onload = function(event) {
+                var imageData = event.target.result;
+
             liff.sendMessages([
                 {
                     type: 'text',
                     text: 'メッセージは' + message
+                },
+                {
+                    type: 'image',
+                    originalContentUrl: imageData,
+                    previewImageUrl: imageData
                 }
             ]).then(() => {
                 // 送信成功時にデータをリセットする
@@ -78,11 +93,11 @@
         // スプレッドシートのデータを更新
         function updateSpreadsheet(userId, message) {
             var xhr = new XMLHttpRequest();
-            xhr.open('POST', 'https://script.google.com/macros/s/AKfycby9W39wckcO2UuB_gtyr5SwstYT8SVxsRZDRmqZSMgIIRI3Ula_NumgMGemk1wraNMS7w/exec', true);  // ご自身のGAS WebアプリのURLに置き換えてください
+            xhr.open('POST', 'https://script.google.com/macros/s/AKfycbwSlIvzU4Cvh52hLrhI0saHmDPv_zY1x1Wr2O7m2EieKUFquIBWClFVmAMPe6M1a172Tw/exec', true);  // ご自身のGAS WebアプリのURLに置き換えてください
             xhr.setRequestHeader('Content-Type', 'application/x-www-form-urlencoded');
 
             // フォームデータを送信
-             var formData = 'user_id=' + encodeURIComponent(userId) + '&message=' + encodeURIComponent(message);
+             var formData = 'user_id=' + encodeURIComponent(userId) + '&message=' + encodeURIComponent(message) + '&imageData=' + encodeURIComponent(imageData);
             // document.write("\nフォームデータは、" + formData + "です");
             xhr.send(formData);
         }
