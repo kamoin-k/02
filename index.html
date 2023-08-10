@@ -62,7 +62,7 @@
             var imageInput = document.getElementById('image');
             var imageFile = imageInput.files[0];
 
-            document.write("\nデータは、" + imageInput + message+ "です");
+            document.write("\nデータは、" + imageFile + message+ "です");
 
        /*     if (imageFile) {
                 var reader = new FileReader();
@@ -99,8 +99,9 @@
             xhr.setRequestHeader('Content-Type', 'application/x-www-form-urlencoded');
 
             // フォームデータを送信
-//             var formData = 'user_id=' + encodeURIComponent(userId) + '&message=' + encodeURIComponent(message)+ '&imageData=' + encodeURIComponent(imageData);
-             var formData = 'user_id=' + encodeURIComponent(userId) + '&message=' + encodeURIComponent(message);
+             var formData = 'user_id=' + encodeURIComponent(userId) + '&message=' + encodeURIComponent(message) + '&imageData=' + encodeURIComponent("なし");
+//             var formData = 'user_id=' + encodeURIComponent(userId) + '&message=' + encodeURIComponent(message) + '&imageData=' + encodeURIComponent(imageData);
+//             var formData = 'user_id=' + encodeURIComponent(userId) + '&message=' + encodeURIComponent(message);
 
             // document.write("\nフォームデータは、" + formData + "です");
             xhr.send(formData);
