@@ -59,11 +59,25 @@
 
             var userId = document.getElementById('user_id').value;
             var message = document.getElementById('message').value;
+            var imageInput = document.getElementById('image');
+            var imageFile = imageInput.files[0];
 
+            if (imageFile) {
+                var reader = new FileReader();
+                reader.readAsDataURL(imageFile);
+                reader.onload = function(event) {
+                var imageData = event.target.result;
+                }
+            }
             liff.sendMessages([
                 {
                     type: 'text',
                     text: 'メッセージは' + message
+                },
+                {
+                     type: 'image',
+                     originalContentUrl: imageData,
+                     previewImageUrl: imageData
                 }
             ]).then(() => {
                 // 送信成功時にデータをリセットする
@@ -82,7 +96,7 @@
             xhr.setRequestHeader('Content-Type', 'application/x-www-form-urlencoded');
 
             // フォームデータを送信
-             var formData = 'user_id=' + encodeURIComponent(userId) + '&message=' + encodeURIComponent(message);
+             var formData = 'user_id=' + encodeURIComponent(userId) + '&message=' + encodeURIComponent(message)+ '&imageData=' + encodeURIComponent(imageData);
             // document.write("\nフォームデータは、" + formData + "です");
             xhr.send(formData);
         }
